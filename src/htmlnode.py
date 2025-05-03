@@ -4,8 +4,8 @@ from typing import Dict, List
 class HTMLNode():
   def __init__(
     self,
-    tag: str = "",
-    value: str = None,
+    tag = "",
+    value = "",
     children: List = [],
     props: Dict[str, str] = {}
   ):
@@ -26,4 +26,4 @@ class HTMLNode():
     return " ".join(attributes)
 
   def __repr__(self) -> str:
-    return f"HTMLNode({self.tag}, {self.value}, {self.children}, {self.props})"
+    return f"HTMLNode({self.tag}, {self.value or '""'}, {self.children}, {self.props})"
