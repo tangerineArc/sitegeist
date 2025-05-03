@@ -6,7 +6,7 @@ class HTMLNode():
     self,
     tag: Optional[str] = None,
     value: Optional[str] = None,
-    children: Optional[List] = None,
+    children: Optional[List["HTMLNode"]] = None,
     props: Optional[Dict[str, str]] = None,
   ):
     self.tag = tag
@@ -14,7 +14,7 @@ class HTMLNode():
     self.children = children
     self.props = props
 
-  def to_html(self) -> None:
+  def to_html(self) -> str:
     raise NotImplementedError
 
   def props_to_html(self) -> str:
