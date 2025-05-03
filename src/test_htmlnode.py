@@ -8,10 +8,10 @@ class TestHTMLNode(unittest.TestCase):
     self.assertEqual(node.props_to_html(), "href=\"https://boot.dev\"")
 
   def test_props_to_html2(self):
-    node = HTMLNode("p", "boot-dev", None, {})
+    node = HTMLNode("p", "boot-dev")
     self.assertEqual(node.props_to_html(), "")
 
-  def test_props_to_html2(self):
+  def test_props_to_html3(self):
     node = HTMLNode("img", None, None, {"src": "https://cool.image", "width": 300, "height": 200})
     self.assertEqual(node.props_to_html(), "src=\"https://cool.image\" width=\"300\" height=\"200\"")
 

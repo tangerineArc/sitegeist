@@ -6,7 +6,7 @@ def main():
   node = TextNode("bold text", TextType.BOLD)
   print(node)
 
-  hnode = HTMLNode("img", "", [], {"src": "https://cool.image", "width": 300, "height": 200})
+  hnode = HTMLNode("img", None, None, {"src": "https://cool.image", "width": 300, "height": 200})
   print(hnode)
 
 

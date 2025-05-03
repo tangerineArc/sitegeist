@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Optional
 
 
 class TextType(Enum):
@@ -14,7 +15,7 @@ class TextNode():
     self,
     text: str,
     text_type: TextType,
-    url = ""
+    url: Optional[str] = None,
   ):
     self.text = text
     self.text_type = text_type
@@ -28,4 +29,4 @@ class TextNode():
     )
 
   def __repr__(self):
-    return f"TextNode({self.text}, {self.text_type.value}, {self.url or '""'})"
+    return f"TextNode({self.text}, {self.text_type.value}, {self.url})"

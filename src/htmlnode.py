@@ -1,13 +1,13 @@
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 
 class HTMLNode():
   def __init__(
     self,
-    tag = "",
-    value = "",
-    children: List = [],
-    props: Dict[str, str] = {}
+    tag: Optional[str] = None,
+    value: Optional[str] = None,
+    children: Optional[List] = None,
+    props: Optional[Dict[str, str]] = None,
   ):
     self.tag = tag
     self.value = value
@@ -18,6 +18,8 @@ class HTMLNode():
     raise NotImplementedError
 
   def props_to_html(self) -> str:
+    if not self.props: return ""
+
     attributes: List[str] = []
 
     for key in self.props:
@@ -26,4 +28,4 @@ class HTMLNode():
     return " ".join(attributes)
 
   def __repr__(self) -> str:
-    return f"HTMLNode({self.tag}, {self.value or '""'}, {self.children}, {self.props})"
+    return f"HTMLNode({self.tag}, {self.value}, {self.children}, {self.props})"
