@@ -1,5 +1,5 @@
 import unittest
-from textnode import split_nodes_delimiter, TextNode, text_node_to_html_node, TextType
+from textnode import split_nodes_delimiter, split_nodes_image,split_nodes_link, TextNode, text_node_to_html_node, TextType
 
 
 class TestTextNode(unittest.TestCase):
@@ -36,7 +36,7 @@ class TestTextNode(unittest.TestCase):
     self.assertEqual(html_node.value, "This is a bold text node")
 
   def test_text3(self):
-    node = TextNode("", TextType.IMAGE, "https://cool-image.com", "cool image")
+    node = TextNode("cool image", TextType.IMAGE, "https://cool-image.com")
     html_node = text_node_to_html_node(node)
     self.assertEqual(html_node.tag, "img")
     self.assertEqual(html_node.value, "")
@@ -98,6 +98,43 @@ class TestTextNode(unittest.TestCase):
       TextNode("code block", TextType.CODE),
       TextNode(" word", TextType.TEXT)
     ])
+
+  def test_split_images(self):
+    node = TextNode(
+      "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png). That's it!",
+      TextType.TEXT,
+    )
+    new_nodes = split_nodes_image([node])
+    self.assertListEqual(
+      [
+        TextNode("This is text with an ", TextType.TEXT),
+        TextNode("image", TextType.IMAGE, "https://i.imgur.com/zjjcJKZ.png"),
+        TextNode(" and another ", TextType.TEXT),
+        TextNode(
+          "second image", TextType.IMAGE, "https://i.imgur.com/3elNhQu.png"
+        ),
+        TextNode(". That's it!", TextType.TEXT)
+      ],
+      new_nodes,
+    )
+
+  def test_split_links(self):
+    node = TextNode(
+      "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",
+      TextType.TEXT,
+    )
+    new_nodes = split_nodes_link([node])
+    self.assertListEqual(
+      [
+        TextNode("This is text with a link ", TextType.TEXT),
+        TextNode("to boot dev", TextType.LINK, "https://www.boot.dev"),
+        TextNode(" and ", TextType.TEXT),
+        TextNode(
+          "to youtube", TextType.LINK, "https://www.youtube.com/@bootdotdev"
+        ),
+      ],
+      new_nodes,
+    )
 
 
 if __name__ == "__main__":
