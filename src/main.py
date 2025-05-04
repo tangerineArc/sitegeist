@@ -1,41 +1,35 @@
-from htmlnode import HTMLNode
-from leafnode import LeafNode
-from parentnode import ParentNode
-from textnode import split_nodes_delimiter, TextNode, TextType
+import os
+import shutil
 
 
 def main():
-  node = TextNode("bold text", TextType.BOLD)
-  print(node)
+  generate_public_contents()
 
-  hnode = HTMLNode("img", None, None, {"src": "https://cool.image", "width": 300, "height": 200})
-  print(hnode)
 
-  lnode = LeafNode("a", "Click me!", {"href": "https://www.google.com"})
-  print(lnode.to_html())
+def generate_public_contents():
+  source_path = os.path.join("static")
+  destination_path = os.path.join("public")
 
-  print(ParentNode(
-    "p",
-    [
-      LeafNode("b", "Bold text"),
-      LeafNode(None, "Normal text"),
-      LeafNode("i", "italic text"),
-      LeafNode(None, "Normal text"),
-    ],
-  ).to_html())
+  if os.path.exists(destination_path):
+    shutil.rmtree(destination_path)
 
-  print(ParentNode(
-    "p",
-    [
-      LeafNode(None, "Normal text"),
-      ParentNode("span", [LeafNode("b", "grandchild")]),
-      LeafNode("b", "Bold text"),
-    ],
-  ).to_html())
+  os.mkdir(destination_path)
 
-  node = TextNode("This is text with a `code block` word", TextType.TEXT)
-  new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
-  print(new_nodes)
+  copy_files(source_path, destination_path)
+
+
+def copy_files(source: str, dest: str):
+  items = os.listdir(source)
+  for item in items:
+    source_item_path = os.path.join(source, item)
+    dest_item_path = os.path.join(dest, item)
+
+    if os.path.isfile(source_item_path):
+      shutil.copy(source_item_path, dest)
+    else:
+      if not os.path.exists(dest_item_path):
+        os.mkdir(dest_item_path)
+      copy_files(source_item_path, dest_item_path)
 
 
 if __name__ == "__main__":
