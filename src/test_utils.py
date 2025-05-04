@@ -27,6 +27,12 @@ class TestHTMLNode(unittest.TestCase):
     )
     self.assertListEqual([], matches)
 
+  def test_links3(self):
+    matches = extract_markdown_links(
+      "[Why Glorfindel is More Impressive than Legolas](/blog/glorfindel)"
+    )
+    self.assertListEqual([("Why Glorfindel is More Impressive than Legolas", "/blog/glorfindel")], matches)
+
   def test_extract_title1(self):
     matches = extract_title("# Hello")
     self.assertEqual("Hello", matches)

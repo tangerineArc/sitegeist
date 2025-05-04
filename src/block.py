@@ -31,7 +31,7 @@ def block_to_block_type(markdown_block: str) -> BlockType:
 
   quotes = unordered_lists = ordered_lists = 0
   for line in lines:
-    if line.startswith("> "):
+    if line.startswith(">"):
       quotes += 1
     elif line.startswith("- "):
       unordered_lists += 1
@@ -83,7 +83,7 @@ def markdown_to_html_node(markdown: str) -> HTMLNode:
         parent_nodes.append(ParentNode("pre", [leaf_node]))
 
       case BlockType.QUOTE:
-        text = re.sub(r"^> ", "", markdown_block, flags = re.MULTILINE)
+        text = re.sub(r"^> ?", "", markdown_block, flags = re.MULTILINE)
         text = " ".join(text.split("\n"))
 
         text_nodes = text_to_textnodes(text)
