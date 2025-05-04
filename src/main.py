@@ -15,11 +15,10 @@ def main():
 
   copy_files(source_path, destination_path)
 
-  input_file_path = os.path.join("content", "index.md")
+  input_file_path = os.path.join("content")
   template_file_path = os.path.join("template.html")
-  output_file_path = os.path.join(destination_path, "index.html")
 
-  generate_page(input_file_path, template_file_path, output_file_path)
+  generate_pages_recursive(input_file_path, template_file_path, destination_path)
 
 
 def copy_files(source: str, dest: str):
@@ -53,6 +52,24 @@ def generate_page(from_path: str, template_path: str, dest_path: str):
 
   with open(dest_path, "w") as html_file:
     html_file.write(template)
+
+
+def generate_pages_recursive(
+  dir_path_content: str,
+  template_path: str,
+  dest_dir_path: str
+):
+  items = os.listdir(dir_path_content)
+  for item in items:
+    source_item_path = os.path.join(dir_path_content, item)
+    dest_item_path = os.path.join(dest_dir_path, item)
+
+    if os.path.isfile(source_item_path):
+      generate_page(source_item_path, template_path, dest_item_path.replace(".md", ".html"))
+    else:
+      if not os.path.exists(dest_item_path):
+        os.mkdir(dest_item_path)
+      generate_pages_recursive(source_item_path, template_path, dest_item_path)
 
 
 if __name__ == "__main__":
