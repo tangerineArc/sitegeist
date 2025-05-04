@@ -1,5 +1,5 @@
 import unittest
-from block import block_to_block_type, BlockType, markdown_to_blocks
+from block import block_to_block_type, BlockType, markdown_to_blocks, markdown_to_html_node
 
 
 class TestHTMLNode(unittest.TestCase):
@@ -59,6 +59,47 @@ class TestHTMLNode(unittest.TestCase):
       "```\nCauses the resulting RE to match from m to n repetitions of the preceding RE, attempting to match as many repetitions as possible.\n```"
     )
     self.assertEqual(block_type, BlockType.CODE)
+
+  def test_markdown_to_html_node1(self):
+    md = "This is **bolded** paragraph\ntext in a p\ntag here\n\nThis is another paragraph with _italic_ text and `code` here\n\n"
+
+    node = markdown_to_html_node(md)
+    html = node.to_html()
+    self.assertEqual(
+      html,
+      "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
+    )
+
+  def test_markdown_to_html_node2(self):
+    md = "```\nThis is text that _should_ remain\nthe **same** even with inline stuff\n```"
+
+    node = markdown_to_html_node(md)
+    html = node.to_html()
+    self.assertEqual(
+      html,
+      "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
+    )
+
+  def test_markdown_to_html_node3(self):
+    md = "> The quarterly results look great!\n> Revenue was off the chart.\n> Profits were higher than ever.\n> _Everything_ is going according to **plan**."
+
+    node = markdown_to_html_node(md)
+    html = node.to_html()
+    self.assertEqual(html, "<div><blockquote>The quarterly results look great! Revenue was off the chart. Profits were higher than ever. <i>Everything</i> is going according to <b>plan</b>.</blockquote></div>")
+
+  def test_markdown_to_html_node4(self):
+    md = "- cool thing\n- dog\n- cat\n- demo-dog"
+
+    node = markdown_to_html_node(md)
+    html = node.to_html()
+    self.assertEqual(html, "<div><ul><li>cool thing</li><li>dog</li><li>cat</li><li>demo-dog</li></ul></div>")
+
+  def test_markdown_to_html_node5(self):
+    md = "1. cool thing\n2. dog3\n3. cat and hay\n4. demo-dog"
+
+    node = markdown_to_html_node(md)
+    html = node.to_html()
+    self.assertEqual(html, "<div><ol><li>cool thing</li><li>dog3</li><li>cat and hay</li><li>demo-dog</li></ol></div>")
 
 
 if __name__ == "__main__":
