@@ -1,5 +1,5 @@
 import unittest
-from utils import extract_markdown_images, extract_markdown_links
+from utils import extract_markdown_images, extract_markdown_links, extract_title
 
 
 class TestHTMLNode(unittest.TestCase):
@@ -27,6 +27,21 @@ class TestHTMLNode(unittest.TestCase):
     )
     self.assertListEqual([], matches)
 
+  def test_extract_title1(self):
+    matches = extract_title("# Hello")
+    self.assertEqual("Hello", matches)
+
+  def test_extract_title2(self):
+    matches = extract_title("# Tolkien Fan Club\n\n![JRR Tolkien sitting](/images/tolkien.png)\n\nHere's the deal, **I like Tolkien**.")
+    self.assertEqual("Tolkien Fan Club", matches)
+
+  def test_extract_title3(self):
+    matches = extract_title("Tolkien Fan Club\n\n![JRR Tolkien sitting](/images/tolkien.png)\n\n# Here's the deal, **I like Tolkien**.")
+    self.assertEqual("Here's the deal, **I like Tolkien**.", matches)
+
+  def test_extract_title4(self):
+    with self.assertRaises(ValueError):
+      extract_title("Tolkien Fan Club\n\n![JRR Tolkien sitting](/images/tolkien.png)\n\nOkay # Here's the deal, **I like Tolkien**.")
 
 if __name__ == "__main__":
   unittest.main()

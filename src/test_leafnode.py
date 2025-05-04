@@ -17,7 +17,8 @@ class TestHTMLNode(unittest.TestCase):
 
   def test_to_html4(self):
     node = LeafNode(None, None)
-    self.assertRaises(ValueError)
+    with self.assertRaises(ValueError):
+      node.to_html()
 
 if __name__ == "__main__":
   unittest.main()
